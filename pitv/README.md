@@ -1,12 +1,12 @@
 # PiTV
 
-> **Status:** Functional Raspberry Pi TV interface with ongoing feature development. Core launcher, HDMI display/audio, Bluetooth input, weather access, and utility pages were working; some streaming/game-integration features remained experimental.
+> **Status:** Functional Raspberry Pi TV interface with ongoing feature development. Core launcher, HDMI display/audio, Bluetooth input, weather access, utility pages, and game streaming are working.
 
 ## Project Overview
 
 PiTV is a custom Raspberry Pi-based interface I built to turn a non-smart television into a simple, dedicated media and information display.
 
-The project uses a **Raspberry Pi 4B with 8 GB of RAM** running Raspberry Pi OS and launches a custom local interface in fullscreen Chromium. The goal was to create something closer to a lightweight smart-TV dashboard than a normal desktop: large buttons, quick access to services, local weather information, system controls, and minimal interaction with the underlying operating system.
+The project uses a **Raspberry Pi 4B with 8 GB of RAM** running Raspberry Pi OS and launches a custom local interface in fullscreen Chromium. The goal was to create something closer to a lightweight smart-TV dashboard than a normal desktop: large buttons, quick access to services, local weather information, system controls, game streaming, and minimal interaction with the underlying operating system.
 
 Rather than purchasing a replacement TV, I used existing hardware and built the interface around the way I actually wanted to use the display.
 
@@ -30,6 +30,7 @@ Rather than purchasing a replacement TV, I used existing hardware and built the 
 - Provide weather and radar access from the couch
 - Add TV-friendly system controls such as volume, networking, and power options
 - Make Bluetooth input and HDMI audio behave reliably after reboot
+- Add local-network game streaming from a more powerful PC
 
 ## Core Interface
 
@@ -47,6 +48,7 @@ The launcher included or was designed to include quick access to services such a
 - Local weather
 - News
 - Radar
+- Game streaming
 - System utilities
 
 The interface went through multiple revisions as I added controls and reorganized the layout.
@@ -146,21 +148,22 @@ Because PiTV is intended to launch directly into a TV interface, I also created 
 
 This made recovery easier without requiring terminal commands every time.
 
-## Game Streaming Experiment
+## Game Streaming
 
-I also experimented with adding game streaming access to PiTV.
+Game streaming was successfully integrated into PiTV using **Luna** on the Raspberry Pi as the client and **Sunshine** on the host PC.
 
-The integration itself was added to the interface, but authentication became a troubleshooting issue: the sign-in flow produced an API error and the sign-in button did not respond correctly.
+This allows games running on a more powerful computer elsewhere on the local network to be streamed to the television through the Raspberry Pi, extending PiTV beyond a media launcher into a lightweight game-streaming endpoint.
 
-Rather than documenting this as a completed feature, I treat it as an unresolved experiment within the larger project.
+Getting this working required configuring both sides of the connection and troubleshooting the original sign-in/API issue before arriving at a working Luna + Sunshine setup.
 
-That problem was still useful because it required separating several possible failure points:
+This part of the project gave me experience with:
 
-- Browser behavior
-- Authentication flow
-- API response
-- Front-end button behavior
-- Raspberry Pi / Chromium compatibility
+- Client/server game-streaming architecture
+- Host and client configuration
+- Local-network streaming
+- Authentication / connection troubleshooting
+- Integrating an external application into a custom TV workflow
+- Separating front-end launcher issues from the underlying streaming stack
 
 ## Architecture
 
@@ -178,14 +181,20 @@ That problem was still useful because it required separating several possible fa
                            |
                   Fullscreen Chromium
                            |
-            +--------------+---------------+
-            |              |               |
-       Streaming       Weather /        PiTV
-       Shortcuts       Radar / NOAA      Utilities
-            |              |               |
-            +--------------+---------------+
+      +--------------------+--------------------+
+      |                    |                    |
+ Streaming /          Weather /             PiTV
+ Game Access          Radar / NOAA           Utilities
+      |                    |                    |
+      +--------------------+--------------------+
                            |
                     Local PiTV UI
+                           |
+                        Luna Client
+                           |
+                      Local Network
+                           |
+                    Sunshine Host PC
 
 Bluetooth keyboard / touchpad -> Raspberry Pi
 HDMI audio -> Television
@@ -205,6 +214,7 @@ That meant focusing on:
 - Simple recovery when something fails
 - Large controls readable at television distance
 - Reducing the need to interact with the Linux desktop directly
+- Integrating local-network game streaming into the same TV workflow
 
 ## Troubleshooting Examples
 
@@ -226,11 +236,13 @@ That meant focusing on:
 
 **Solution:** Configured and tested the PipeWire / WirePlumber audio path for HDMI output.
 
-### Web Integration Problems
+### Game Streaming Integration
 
-**Problem:** Individual web integrations did not always behave the same way under Chromium on the Raspberry Pi. Examples included an incorrect local-news link and the game-streaming sign-in/API issue.
+**Problem:** An earlier game-streaming integration attempt produced an API/sign-in issue and the sign-in flow did not work correctly.
 
-**Approach:** Tested each component independently, separated working features from unfinished ones, and kept the core launcher functional even when an optional integration had problems.
+**Solution:** Continued troubleshooting and ultimately implemented a working **Luna client + Sunshine host** setup for local-network game streaming.
+
+This was a useful example of not treating the first failed integration as the end of the feature; I changed the implementation and kept testing until the streaming path worked reliably.
 
 ## Skills Demonstrated
 
@@ -248,6 +260,9 @@ This project demonstrates hands-on experience with:
 - PipeWire / WirePlumber audio configuration
 - Weather-data integration
 - NOAA / NWS resources
+- Local-network game streaming
+- Sunshine host configuration
+- Luna client configuration
 - UI design for large displays
 - Iterative troubleshooting and feature development
 - Repurposing existing hardware instead of replacing it
@@ -272,7 +287,8 @@ This project demonstrates hands-on experience with:
 - Added weather and aircraft radar concepts
 - Built a simplified NOAA forecast page using local NWS data
 - Experimented with game-streaming integration
-- Encountered an unresolved API/sign-in issue with the game-streaming feature
+- Encountered an initial API/sign-in issue during development
+- Reworked the game-streaming setup and successfully configured **Luna + Sunshine** for local-network streaming
 
 ---
 
