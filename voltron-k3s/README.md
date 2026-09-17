@@ -50,6 +50,7 @@ This naming scheme also makes the individual systems easier to identify than gen
 
 - **5× Dell Wyse 3040 thin clients**
 - Internal eMMC storage on each node
+- **Cloud-managed Gigabit Ethernet switch** for cluster connectivity
 - Gigabit Ethernet networking
 - Custom-made Cat6 Ethernet cables as additional nodes are brought online
 - **Potential future storage:** 128 GB USB storage attached to Pidge for shared-storage experimentation
@@ -98,7 +99,7 @@ Remote administration is performed over SSH using the node's local network addre
 
 ## Networking and Addressing Plan
 
-All cluster traffic will use wired Ethernet rather than Wi-Fi.
+All five cluster nodes will connect by wired Ethernet to a **cloud-managed Gigabit switch**. The switch provides the physical Layer 2 connection between the nodes and the rest of the home network, while the router continues to provide DHCP addressing and reservations.
 
 Each physical Wyse unit will receive a predictable DHCP reservation so the nodes can be reached consistently without manually assigning static addresses inside Debian. The systems themselves remain configured for DHCP, while the router assigns the same address to each node based on its network adapter.
 
@@ -114,7 +115,7 @@ The addressing pattern follows the physical unit number:
 
 The subnet is intentionally sanitized as `192.168.x.x` in the public documentation. MAC addresses and other identifying network information are kept private.
 
-This approach provides predictable addressing while keeping network configuration centralized at the router instead of manually maintaining static IP settings on every node.
+This approach provides predictable addressing while keeping network configuration centralized at the router instead of manually maintaining static IP settings on every node. Using a managed switch also leaves room for future network experiments such as port monitoring, traffic inspection, VLANs, or segmentation if those features are useful later.
 
 ## K3s Architecture — Planned
 
@@ -123,7 +124,9 @@ K3s is not installed yet. Once the remaining base-node work is complete, the pla
 ```text
                               Home Network
                                    |
-                              Ethernet LAN
+                              Router / DHCP
+                                   |
+                    Cloud-Managed Gigabit Switch
                                    |
        +-----------+-----------+-----------+-----------+-----------+
        |           |           |           |           |           |
@@ -136,7 +139,7 @@ K3s is not installed yet. Once the remaining base-node work is complete, the pla
 
 Keith will run the K3s server/control-plane role. Allura, Lance, Pidge, and Hunk are planned as agent/worker nodes, with Pidge also serving as the planned storage host.
 
-The diagram intentionally shows all five systems as peers on the same Ethernet network. Keith coordinates the Kubernetes cluster as the control-plane node, but the other systems are not physically connected through Keith.
+The diagram intentionally shows all five systems as peers connected to the same managed switch. Keith coordinates the Kubernetes cluster as the control-plane node, but the other systems are not physically connected through Keith.
 
 ## Why Wyse 3040 Thin Clients?
 
@@ -174,16 +177,17 @@ Configuration examples may use sanitized addresses or placeholders where appropr
 ## Next Steps
 
 1. Build/terminate the additional Cat6 Ethernet cables needed for the remaining nodes.
-2. Bring the remaining four Wyse systems onto the network one at a time.
-3. Install and configure Debian on each node.
-4. Assign hostnames and DHCP reservations.
-5. Configure and verify SSH access to every node.
-6. Install the K3s server on Keith.
-7. Join Pidge, Lance, Allura, and Hunk as K3s agents.
-8. Verify the cluster with `kubectl get nodes`.
-9. Deploy a small test workload across the cluster.
-10. Evaluate the 128 GB USB storage idea for Pidge and determine whether it is useful for shared or persistent storage.
-11. Document workloads, failures, troubleshooting, and design changes as the cluster evolves.
+2. Connect the remaining Wyse systems to the managed Gigabit switch one at a time.
+3. Bring the remaining four Wyse systems onto the network.
+4. Install and configure Debian on each node.
+5. Assign hostnames and DHCP reservations.
+6. Configure and verify SSH access to every node.
+7. Install the K3s server on Keith.
+8. Join Pidge, Lance, Allura, and Hunk as K3s agents.
+9. Verify the cluster with `kubectl get nodes`.
+10. Deploy a small test workload across the cluster.
+11. Evaluate the 128 GB USB storage idea for Pidge and determine whether it is useful for shared or persistent storage.
+12. Document workloads, failures, troubleshooting, and design changes as the cluster evolves.
 
 ## Skills Demonstrated
 
@@ -192,6 +196,7 @@ This project is intended to demonstrate practical experience with:
 - Debian Linux administration
 - SSH and remote administration
 - DHCP and local network configuration
+- Managed Ethernet switching
 - Ethernet cable termination and physical networking
 - Hostname and node management
 - Hardware troubleshooting
@@ -214,6 +219,7 @@ This project is intended to demonstrate practical experience with:
 - Designated Keith as the planned K3s control-plane node
 - Designated Pidge as the planned shared-storage node
 - Established a predictable DHCP reservation scheme based on physical unit number
+- Planned all five nodes to connect through a cloud-managed Gigabit switch
 - Paused additional node deployment until more Ethernet cables are completed
 
 ---
