@@ -46,13 +46,13 @@ A multi-node Kubernetes homelab built using repurposed Dell Wyse thin clients. T
 
 [View the Voltron K3s project documentation](voltron-k3s/README.md)
 
-### Debian Homelab Server
+### Debian Laptop Server
 
-A Debian-based home server environment used to experiment with self-hosted infrastructure and server administration. The system has included tools and services such as Docker, Cockpit, Cloudflare, and web-based management utilities.
+An older HP laptop repurposed as a Debian 13 home server for Linux administration, SSH, local web/file hosting, Cockpit, Docker experimentation, and network troubleshooting. The project includes real-world use as a large-file host and demonstrates how older consumer hardware can be adapted for reliable server workloads.
 
-**Topics:** Debian, Docker, Cloudflare, Cockpit, self-hosting
+**Topics:** Debian 13, SSH, Cockpit, Docker, systemd, DNS, file hosting, networking
 
-> Detailed project documentation coming soon.
+[View the Debian Laptop Server project documentation](debian-server/README.md)
 
 ### Portable Local AI Environment
 
