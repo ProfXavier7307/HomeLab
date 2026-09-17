@@ -26,7 +26,7 @@ The systems are named after characters from *Voltron*. Rather than building the 
 - Internal eMMC storage on each node
 - Gigabit Ethernet networking
 - Custom-made Cat6 Ethernet cables as additional nodes are brought online
-- **Potential future storage:** 128 GB USB storage attached to Hunk for shared-storage experimentation
+- **Potential future storage:** 128 GB USB storage attached to Pidge for shared-storage experimentation
 
 The USB storage idea is currently only a plan and has not been deployed.
 
@@ -35,10 +35,10 @@ The USB storage idea is currently only a plan and has not been deployed.
 | Node | Voltron Role | Physical Unit | Planned Cluster Role | Current Status |
 |---|---|---:|---|---|
 | **Keith** | Black Lion | #4 | K3s control plane | **Online / Debian configured / SSH working** |
-| **Pidge** | Green Lion | TBD | Worker | Not configured yet |
+| **Pidge** | Green Lion | TBD | Worker / planned storage host | Not configured yet |
 | **Lance** | Red Lion | TBD | Worker | Not configured yet |
 | **Allura** | Blue Lion | TBD | Worker | Not configured yet |
-| **Hunk** | Yellow Lion | TBD | Worker / possible storage experiments | Not configured yet |
+| **Hunk** | Yellow Lion | TBD | Worker | Not configured yet |
 
 ## Current Progress
 
@@ -92,8 +92,8 @@ K3s is not installed yet. Once the remaining base-node work is complete, the pla
           +-------+        +-------+       +-------+
           | Keith |        | Pidge |       | Lance |
           | K3s   |        | Agent |       | Agent |
-          |Server |        +-------+       +-------+
-          +---+---+
+          |Server |        |Storage|       +-------+
+          +---+---+        +-------+
               |
        +------+------+
        |             |
@@ -103,7 +103,7 @@ K3s is not installed yet. Once the remaining base-node work is complete, the pla
    +-------+     +-------+
 ```
 
-Keith will run the K3s server/control-plane role. The other four systems are planned as agents/workers.
+Keith will run the K3s server/control-plane role. The other four systems are planned as agents/workers. Pidge is also planned to host the cluster's experimental shared storage, fitting its role as the project's "brainiac" node.
 
 ## Why Wyse 3040 Thin Clients?
 
@@ -135,7 +135,7 @@ Rather than assuming every used system is identical or problem-free, each node i
 7. Join Pidge, Lance, Allura, and Hunk as K3s agents.
 8. Verify the cluster with `kubectl get nodes`.
 9. Deploy a small test workload across the cluster.
-10. Evaluate the 128 GB USB storage idea for Hunk and determine whether it is useful for shared or persistent storage.
+10. Evaluate the 128 GB USB storage idea for Pidge and determine whether it is useful for shared or persistent storage.
 
 ## Skills Demonstrated
 
@@ -162,6 +162,7 @@ This project is intended to demonstrate practical experience with:
 - Configured hostname and SSH access
 - Verified remote connectivity
 - Designated Keith as the planned K3s control-plane node
+- Designated Pidge as the planned shared-storage node
 - Paused additional node deployment until more Ethernet cables are completed
 
 ---
