@@ -44,13 +44,13 @@ A multi-node Kubernetes homelab built using repurposed Dell Wyse thin clients. T
 
 **Topics:** K3s, Linux, networking, clustering, container orchestration, thin clients
 
-> Detailed project documentation coming soon.
+[View the Voltron K3s project documentation](voltron-k3s/README.md)
 
 ### Debian Homelab Server
 
-A Debian-based home server environment used to experiment with self-hosted infrastructure and server administration. The system has included tools and services such as Docker, Caddy, Cockpit, and web-based management utilities.
+A Debian-based home server environment used to experiment with self-hosted infrastructure and server administration. The system has included tools and services such as Docker, Cockpit, Cloudflare, and web-based management utilities.
 
-**Topics:** Debian, Docker, Caddy, HTTPS, Cockpit, self-hosting
+**Topics:** Debian, Docker, Cloudflare, Cockpit, self-hosting
 
 > Detailed project documentation coming soon.
 
