@@ -35,6 +35,7 @@ This portfolio includes work involving:
 - Local AI / LLM deployment
 - llama.cpp and GGUF models
 - Windows and Linux scripting
+- Bluetooth and HDMI troubleshooting
 - Hardware troubleshooting and repurposing
 - Cybersecurity fundamentals
 
@@ -66,11 +67,11 @@ A portable local-LLM environment stored on a 256 GB external NVMe drive and desi
 
 ### PiTV
 
-A Raspberry Pi-based custom TV interface designed for a non-smart television. The project uses Raspberry Pi OS and a fullscreen Chromium interface to provide quick access to streaming services, local weather, radar, utilities, and system controls.
+A Raspberry Pi 4B-based custom TV interface built to turn a non-smart television into a lightweight smart-TV-style dashboard. PiTV uses Raspberry Pi OS and fullscreen Chromium for streaming shortcuts, local weather and NOAA information, radar, utility controls, HDMI audio, and Bluetooth input.
 
-**Topics:** Raspberry Pi, Linux, Chromium, scripting, UI design, HDMI, Bluetooth
+**Topics:** Raspberry Pi, Linux, Chromium, systemd, Bluetooth, HDMI, PipeWire, weather integration, UI design
 
-> Detailed project documentation coming soon.
+[View the PiTV project documentation](pitv/README.md)
 
 ## Repository Structure
 
