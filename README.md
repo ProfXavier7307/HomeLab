@@ -2,7 +2,7 @@
 
 Welcome to my personal homelab portfolio. This repository documents hands-on projects I have built to strengthen my skills in IT, cybersecurity, Linux administration, networking, containerization, self-hosting, automation, and systems troubleshooting.
 
-I use my homelab as a practical environment for learning beyond the classroom—building systems, breaking them, troubleshooting problems, and documenting the solutions.
+I use my homelab as a practical environment for learning beyond the classroom; building systems, breaking them, troubleshooting problems, and documenting the solutions.
 
 ## About Me
 
@@ -27,7 +27,7 @@ This portfolio includes work involving:
 - Kubernetes / K3s
 - Networking and DHCP configuration
 - SSH and remote administration
-- Caddy and HTTPS
+- Cloudflare
 - Cockpit
 - Self-hosted services
 - Raspberry Pi projects
