@@ -128,13 +128,13 @@ K3s is not installed yet. Once the remaining base-node work is complete, the pla
                                    |
                     Cloud-Managed Gigabit Switch
                                    |
-       +-----------+-----------+-----------+-----------+-----------+
-       |           |           |           |           |           |
-   +--------+  +--------+  +--------+  +--------+  +--------+
-   | Allura |  | Lance  |  | Keith  |  | Pidge  |  | Hunk   |
-   | Agent  |  | Agent  |  |  K3s   |  | Agent  |  | Agent  |
-   |        |  |        |  | Server |  |Storage |  |        |
-   +--------+  +--------+  +--------+  +--------+  +--------+
+           +-----------+-----------+-----------+-----------+
+           |           |           |           |           |           
+       +--------+  +--------+  +--------+  +--------+  +--------+
+       | Allura |  | Lance  |  | Keith  |  | Pidge  |  | Hunk   |
+       | Agent  |  | Agent  |  |  K3s   |  | Agent  |  | Agent  |
+       |        |  |        |  | Server |  |Storage |  |        |
+       +--------+  +--------+  +--------+  +--------+  +--------+
 ```
 
 Keith will run the K3s server/control-plane role. Allura, Lance, Pidge, and Hunk are planned as agent/worker nodes, with Pidge also serving as the planned storage host.
