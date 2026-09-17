@@ -8,6 +8,17 @@ Voltron is a five-node homelab cluster built from repurposed **Dell Wyse 3040 th
 
 The systems are named after characters from *Voltron*. Rather than building the entire environment at once, I am bringing each node online individually, validating its hardware and network configuration, and documenting the process as the cluster develops.
 
+## Current Status
+
+| Component | Progress |
+|---|---:|
+| Nodes online | **1 / 5** |
+| Debian configured | **1 / 5** |
+| SSH configured | **1 / 5** |
+| K3s control plane | **0 / 1** |
+| K3s workers joined | **0 / 4** |
+| Shared storage | **Planned** |
+
 ## Project Goals
 
 - Repurpose low-cost thin clients as a multi-node Linux cluster
@@ -19,6 +30,21 @@ The systems are named after characters from *Voltron*. Rather than building the 
 - Experiment with containerized and distributed workloads
 - Explore inexpensive shared-storage options
 - Practice troubleshooting hardware, Linux, networking, and cluster issues
+- Maintain clear technical documentation as the environment evolves
+
+## Naming and Role Design
+
+The cluster is named **Voltron**, with each node named after a member of the team.
+
+The names are not purely cosmetic; where possible, the planned infrastructure roles reflect the characters:
+
+- **Keith** — planned K3s control-plane node, reflecting his leadership role
+- **Pidge** — planned worker and storage host, reflecting Pidge's technical and "brainiac" role
+- **Lance** — planned worker node
+- **Allura** — planned worker node
+- **Hunk** — planned worker node
+
+This naming scheme also makes the individual systems easier to identify than generic hostnames such as `node1` or `worker2`.
 
 ## Hardware
 
@@ -70,40 +96,47 @@ keith
 
 Remote administration is performed over SSH using the node's local network address. MAC addresses, SSH keys, and other sensitive network information are intentionally not published in this repository.
 
-## Networking Plan
-
-Each physical Wyse unit will receive a predictable DHCP reservation so the nodes can be reached consistently without manually configuring static addressing inside Debian.
-
-The reservation scheme is based on the physical unit number, making it easier to identify hardware while troubleshooting. Exact MAC addresses and other identifying network information are kept private.
+## Networking and Addressing Plan
 
 All cluster traffic will use wired Ethernet rather than Wi-Fi.
+
+Each physical Wyse unit will receive a predictable DHCP reservation so the nodes can be reached consistently without manually assigning static addresses inside Debian. The systems themselves remain configured for DHCP, while the router assigns the same address to each node based on its network adapter.
+
+The addressing pattern follows the physical unit number:
+
+| Physical Unit | Public Documentation Address | Assignment |
+|---:|---|---|
+| #1 | `192.168.x.101` | DHCP reservation |
+| #2 | `192.168.x.102` | DHCP reservation |
+| #3 | `192.168.x.103` | DHCP reservation |
+| #4 | `192.168.x.104` | **Keith** |
+| #5 | `192.168.x.105` | DHCP reservation |
+
+The subnet is intentionally sanitized as `192.168.x.x` in the public documentation. MAC addresses and other identifying network information are kept private.
+
+This approach provides predictable addressing while keeping network configuration centralized at the router instead of manually maintaining static IP settings on every node.
 
 ## K3s Architecture — Planned
 
 K3s is not installed yet. Once the remaining base-node work is complete, the planned architecture is:
 
 ```text
-                         Home Network
-                              |
-                         Ethernet LAN
-                              |
-              +---------------+---------------+
-              |               |               |
-          +-------+        +-------+       +-------+
-          | Keith |        | Pidge |       | Lance |
-          | K3s   |        | Agent |       | Agent |
-          |Server |        |Storage|       +-------+
-          +---+---+        +-------+
-              |
-       +------+------+
-       |             |
-   +-------+     +-------+
-   |Allura |     | Hunk  |
-   | Agent |     | Agent |
-   +-------+     +-------+
+                              Home Network
+                                   |
+                              Ethernet LAN
+                                   |
+       +-----------+-----------+-----------+-----------+-----------+
+       |           |           |           |           |           |
+   +--------+  +--------+  +--------+  +--------+  +--------+
+   | Allura |  | Lance  |  | Keith  |  | Pidge  |  | Hunk   |
+   | Agent  |  | Agent  |  |  K3s   |  | Agent  |  | Agent  |
+   |        |  |        |  | Server |  |Storage |  |        |
+   +--------+  +--------+  +--------+  +--------+  +--------+
 ```
 
-Keith will run the K3s server/control-plane role. The other four systems are planned as agents/workers. Pidge is also planned to host the cluster's experimental shared storage, fitting its role as the project's "brainiac" node.
+Keith will run the K3s server/control-plane role. Allura, Lance, Pidge, and Hunk are planned as agent/worker nodes, with Pidge also serving as the planned storage host.
+
+The diagram intentionally shows all five systems as peers on the same Ethernet network. Keith coordinates the Kubernetes cluster as the control-plane node, but the other systems are not physically connected through Keith.
 
 ## Why Wyse 3040 Thin Clients?
 
@@ -124,6 +157,20 @@ During initial testing, all five systems were able to boot, although some units 
 
 Rather than assuming every used system is identical or problem-free, each node is being tested individually before it becomes part of the cluster.
 
+## Documentation and Security Practices
+
+Because this repository is public, configuration details are documented without publishing credentials or sensitive network information.
+
+Items intentionally excluded include:
+
+- SSH private keys
+- Passwords
+- API keys or tokens
+- MAC addresses
+- Unnecessary identifying network details
+
+Configuration examples may use sanitized addresses or placeholders where appropriate.
+
 ## Next Steps
 
 1. Build/terminate the additional Cat6 Ethernet cables needed for the remaining nodes.
@@ -136,6 +183,7 @@ Rather than assuming every used system is identical or problem-free, each node i
 8. Verify the cluster with `kubectl get nodes`.
 9. Deploy a small test workload across the cluster.
 10. Evaluate the 128 GB USB storage idea for Pidge and determine whether it is useful for shared or persistent storage.
+11. Document workloads, failures, troubleshooting, and design changes as the cluster evolves.
 
 ## Skills Demonstrated
 
@@ -149,8 +197,10 @@ This project is intended to demonstrate practical experience with:
 - Hardware troubleshooting
 - Kubernetes/K3s concepts
 - Container orchestration
+- Shared-storage planning
 - Low-cost infrastructure design
 - Technical documentation
+- Security-conscious public documentation
 
 ## Project Log
 
@@ -163,6 +213,7 @@ This project is intended to demonstrate practical experience with:
 - Verified remote connectivity
 - Designated Keith as the planned K3s control-plane node
 - Designated Pidge as the planned shared-storage node
+- Established a predictable DHCP reservation scheme based on physical unit number
 - Paused additional node deployment until more Ethernet cables are completed
 
 ---
