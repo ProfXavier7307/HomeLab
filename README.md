@@ -33,6 +33,7 @@ This portfolio includes work involving:
 - Self-hosted services
 - Raspberry Pi projects
 - Local AI / LLM deployment
+- llama.cpp and GGUF models
 - Windows and Linux scripting
 - Hardware troubleshooting and repurposing
 - Cybersecurity fundamentals
@@ -55,13 +56,13 @@ An older HP laptop repurposed as a Debian 13 home server for Linux administratio
 
 [View the Debian Laptop Server project documentation](debian-server/README.md)
 
-### Portable Local AI Environment
+### Portable Local AI Environment (PLAE)
 
-A portable local-LLM environment designed to run from an external NVMe drive across both Windows and Linux systems. The project uses llama.cpp, quantized GGUF models, and custom startup scripts to create a portable offline AI toolkit.
+A portable local-LLM environment stored on a 256 GB external NVMe drive and designed to work across Windows and Tails/Linux. PLAE uses `llama.cpp`, quantized GGUF models, and platform-specific startup scripts to provide a portable offline AI toolkit without requiring the environment to be permanently installed on each host computer.
 
-**Topics:** Local AI, llama.cpp, GGUF, Windows, Linux, scripting, portable computing
+**Topics:** Local AI, llama.cpp, GGUF, Qwen3, Windows, Tails, Bash, batch scripting, exFAT, portable computing
 
-> Detailed project documentation coming soon.
+[View the PLAE project documentation](portable-local-ai/README.md)
 
 ### PiTV
 
