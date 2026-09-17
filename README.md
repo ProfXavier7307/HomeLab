@@ -27,6 +27,7 @@ This portfolio includes work involving:
 - Kubernetes / K3s
 - Networking and DHCP configuration
 - SSH and remote administration
+- Tailscale
 - Cloudflare
 - Cockpit
 - Self-hosted services
@@ -48,9 +49,9 @@ A multi-node Kubernetes homelab built using repurposed Dell Wyse thin clients. T
 
 ### Debian Laptop Server
 
-An older HP laptop repurposed as a Debian 13 home server for Linux administration, SSH, local web/file hosting, Cockpit, Docker experimentation, and network troubleshooting. The project includes real-world use as a large-file host and demonstrates how older consumer hardware can be adapted for reliable server workloads.
+An older HP laptop repurposed as a Debian 13 home server for Linux administration, SSH, Tailscale remote access, Cockpit, local web/file hosting, Docker experimentation, and network troubleshooting. The server also hosted shared D&D files for my gaming group to access while connected to my home network.
 
-**Topics:** Debian 13, SSH, Cockpit, Docker, systemd, DNS, file hosting, networking
+**Topics:** Debian 13, SSH, Tailscale, Cockpit, Docker, systemd, DNS, file hosting, networking
 
 [View the Debian Laptop Server project documentation](debian-server/README.md)
 
