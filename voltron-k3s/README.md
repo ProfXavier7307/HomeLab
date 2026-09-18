@@ -41,10 +41,10 @@ The final physical-unit naming map is:
 | Physical Unit | Node | Lion | Planned Role |
 |---:|---|---|---|
 | #1 | **Lance** | Red Lion | K3s worker |
-| #2 | **Hunk** | Yellow Lion | K3s worker / planned storage host |
+| #2 | **Hunk** | Yellow Lion | K3s worker |
 | #3 | **Allura** | Blue Lion | K3s worker |
 | #4 | **Keith** | Black Lion | K3s control plane |
-| #5 | **Pidge** | Green Lion | K3s worker |
+| #5 | **Pidge** | Green Lion | K3s worker / planned storage host |
 
 This naming scheme makes the individual systems easier to identify than generic hostnames such as `node1` or `worker2`.
 
@@ -55,7 +55,7 @@ This naming scheme makes the individual systems easier to identify than generic 
 - **Cloud-managed Gigabit Ethernet switch** for cluster connectivity
 - Gigabit Ethernet networking
 - Custom-made Cat6 Ethernet cables as additional nodes are brought online
-- **Potential future storage:** 128 GB USB storage attached to Hunk for shared-storage experimentation
+- **Potential future storage:** 128 GB USB storage attached to Pidge for shared-storage experimentation
 
 The USB storage idea is currently only a plan and has not been deployed.
 
@@ -64,10 +64,10 @@ The USB storage idea is currently only a plan and has not been deployed.
 | Node | Voltron Role | Physical Unit | Planned Cluster Role | Current Status |
 |---|---|---:|---|---|
 | **Lance** | Red Lion | #1 | Worker | Offline / not configured yet |
-| **Hunk** | Yellow Lion | #2 | Worker / planned storage host | Offline / not configured yet |
+| **Hunk** | Yellow Lion | #2 | Worker | Offline / not configured yet |
 | **Allura** | Blue Lion | #3 | Worker | Offline / not configured yet |
 | **Keith** | Black Lion | #4 | K3s control plane | **Online / Debian configured / SSH working** |
-| **Pidge** | Green Lion | #5 | Worker | **Online / Debian configured / SSH working / DHCP reservation configured** |
+| **Pidge** | Green Lion | #5 | Worker / planned storage host | **Online / Debian configured / SSH working / DHCP reservation configured** |
 
 ## Current Progress
 
@@ -167,11 +167,11 @@ K3s is not installed yet. Once the remaining base-node work is complete, the pla
        +--------+  +--------+  +--------+  +--------+  +--------+
        | Lance  |  | Hunk   |  | Allura |  | Keith  |  | Pidge  |
        | Agent  |  | Agent  |  | Agent  |  |  K3s   |  | Agent  |
-       |        |  |Storage |  |        |  | Server |  |        |
+       |        |  |        |  |        |  | Server |  |Storage |
        +--------+  +--------+  +--------+  +--------+  +--------+
 ```
 
-Keith will run the K3s server/control-plane role. Lance, Hunk, Allura, and Pidge are planned as agent/worker nodes, with Hunk also serving as the planned storage host.
+Keith will run the K3s server/control-plane role. Lance, Hunk, Allura, and Pidge are planned as agent/worker nodes, with Pidge also serving as the planned storage host.
 
 ## Why Wyse 3040 Thin Clients?
 
@@ -216,7 +216,7 @@ Configuration examples may use sanitized addresses or placeholders where appropr
 6. Join Pidge, Lance, Allura, and Hunk as K3s agents.
 7. Verify the cluster with `kubectl get nodes`.
 8. Deploy a small test workload across the cluster.
-9. Evaluate the 128 GB USB storage idea for Hunk and determine whether it is useful for shared or persistent storage.
+9. Evaluate the 128 GB USB storage idea for Pidge and determine whether it is useful for shared or persistent storage.
 10. Document workloads, failures, troubleshooting, and design changes as the cluster evolves.
 
 ## Skills Demonstrated
@@ -253,7 +253,7 @@ This project is intended to demonstrate practical experience with:
 - Assigned physical unit #5 as **Pidge**
 - Configured Pidge to use the #5 DHCP reservation (`192.168.x.105` in public documentation)
 - Brought Pidge online as the second configured node
-- Designated **Hunk (#2)** as the planned shared-storage host
+- Designated **Pidge (#5)** as the planned shared-storage host
 - Added and tested a Windows Python SSH launcher that can open simultaneous SSH sessions to the Voltron nodes
 - Planned all five nodes to connect through a cloud-managed Gigabit switch
 
