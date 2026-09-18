@@ -15,11 +15,11 @@ Local cluster addressing:
 """
 
 devices = {
-    "1": ("Lance", "Red Lion", "192.168.1.101"),
-    "2": ("Hunk", "Yellow Lion", "192.168.1.102"),
-    "3": ("Allura", "Blue Lion", "192.168.1.103"),
-    "4": ("Keith", "Black Lion", "192.168.1.104"),
-    "5": ("Pidge", "Green Lion", "192.168.1.105"),
+    "1": ("Lance", "Red Lion", "192.168.x.101"),
+    "2": ("Hunk", "Yellow Lion", "192.168.x.102"),
+    "3": ("Allura", "Blue Lion", "192.168.x.103"),
+    "4": ("Keith", "Black Lion", "192.168.x.104"),
+    "5": ("Pidge", "Green Lion", "192.168.x.105"),
 }
 
 print("Welcome to the Voltron SSH Connection Program!")
