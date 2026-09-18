@@ -1,6 +1,6 @@
 # Voltron K3s Cluster
 
-> **Status:** In progress — 1 of 5 nodes currently configured and online. K3s has **not** been installed yet.
+> **Status:** In progress — 2 of 5 nodes currently configured and online. K3s has **not** been installed yet.
 
 ## Project Overview
 
@@ -12,9 +12,9 @@ The systems are named after characters from *Voltron*. Rather than building the 
 
 | Component | Progress |
 |---|---:|
-| Nodes online | **1 / 5** |
-| Debian configured | **1 / 5** |
-| SSH configured | **1 / 5** |
+| Nodes online | **2 / 5** |
+| Debian configured | **2 / 5** |
+| SSH configured | **2 / 5** |
 | K3s control plane | **0 / 1** |
 | K3s workers joined | **0 / 4** |
 | Shared storage | **Planned** |
@@ -39,10 +39,10 @@ The cluster is named **Voltron**, with each node named after a member of the tea
 The names are not purely cosmetic; where possible, the planned infrastructure roles reflect the characters:
 
 - **Keith** — planned K3s control-plane node, reflecting his leadership role
-- **Pidge** — planned worker and storage host, reflecting Pidge's technical and "brainiac" role
+- **Pidge** — worker node
 - **Lance** — planned worker node
 - **Allura** — planned worker node
-- **Hunk** — planned worker node
+- **Hunk** — planned worker and storage host
 
 This naming scheme also makes the individual systems easier to identify than generic hostnames such as `node1` or `worker2`.
 
@@ -53,7 +53,7 @@ This naming scheme also makes the individual systems easier to identify than gen
 - **Cloud-managed Gigabit Ethernet switch** for cluster connectivity
 - Gigabit Ethernet networking
 - Custom-made Cat6 Ethernet cables as additional nodes are brought online
-- **Potential future storage:** 128 GB USB storage attached to Pidge for shared-storage experimentation
+- **Potential future storage:** 128 GB USB storage attached to Hunk for shared-storage experimentation
 
 The USB storage idea is currently only a plan and has not been deployed.
 
@@ -62,16 +62,16 @@ The USB storage idea is currently only a plan and has not been deployed.
 | Node | Voltron Role | Physical Unit | Planned Cluster Role | Current Status |
 |---|---|---:|---|---|
 | **Keith** | Black Lion | #4 | K3s control plane | **Online / Debian configured / SSH working** |
-| **Pidge** | Green Lion | TBD | Worker / planned storage host | Not configured yet |
+| **Pidge** | Green Lion | #5 | Worker | **Online / Debian configured / SSH working / DHCP reservation configured** |
 | **Lance** | Red Lion | TBD | Worker | Not configured yet |
 | **Allura** | Blue Lion | TBD | Worker | Not configured yet |
-| **Hunk** | Yellow Lion | TBD | Worker | Not configured yet |
+| **Hunk** | Yellow Lion | TBD | Worker / planned storage host | Not configured yet |
 
 ## Current Progress
 
 ### Keith — First Node Online
 
-Keith is currently the only fully configured node.
+Keith was the first fully configured node.
 
 Completed so far:
 
@@ -95,7 +95,19 @@ Expected output:
 keith
 ```
 
-Remote administration is performed over SSH using the node's local network address. MAC addresses, SSH keys, and other sensitive network information are intentionally not published in this repository.
+### Pidge — Second Node Online
+
+Physical unit **#5** has now been assigned as **Pidge**.
+
+Completed so far:
+
+- Assigned hostname `pidge`
+- Connected the node to the wired network
+- Configured a DHCP reservation corresponding to physical unit #5
+- Verified the node is reachable on the local network
+- Designated Pidge as a future K3s worker node
+
+Remote administration is performed over SSH using each node's local network address. MAC addresses, SSH keys, and other sensitive network information are intentionally not published in this repository.
 
 ## Networking and Addressing Plan
 
@@ -111,7 +123,7 @@ The addressing pattern follows the physical unit number:
 | #2 | `192.168.x.102` | DHCP reservation |
 | #3 | `192.168.x.103` | DHCP reservation |
 | #4 | `192.168.x.104` | **Keith** |
-| #5 | `192.168.x.105` | DHCP reservation |
+| #5 | `192.168.x.105` | **Pidge** |
 
 The subnet is intentionally sanitized as `192.168.x.x` in the public documentation. MAC addresses and other identifying network information are kept private.
 
@@ -129,15 +141,15 @@ K3s is not installed yet. Once the remaining base-node work is complete, the pla
                     Cloud-Managed Gigabit Switch
                                    |
            +-----------+-----------+-----------+-----------+
-           |           |           |           |           |           
+           |           |           |           |           |
        +--------+  +--------+  +--------+  +--------+  +--------+
        | Allura |  | Lance  |  | Keith  |  | Pidge  |  | Hunk   |
        | Agent  |  | Agent  |  |  K3s   |  | Agent  |  | Agent  |
-       |        |  |        |  | Server |  |Storage |  |        |
+       |        |  |        |  | Server |  |        |  |Storage |
        +--------+  +--------+  +--------+  +--------+  +--------+
 ```
 
-Keith will run the K3s server/control-plane role. Allura, Lance, Pidge, and Hunk are planned as agent/worker nodes, with Pidge also serving as the planned storage host.
+Keith will run the K3s server/control-plane role. Allura, Lance, Pidge, and Hunk are planned as agent/worker nodes, with Hunk also serving as the planned storage host.
 
 The diagram intentionally shows all five systems as peers connected to the same managed switch. Keith coordinates the Kubernetes cluster as the control-plane node, but the other systems are not physically connected through Keith.
 
@@ -178,15 +190,15 @@ Configuration examples may use sanitized addresses or placeholders where appropr
 
 1. Build/terminate the additional Cat6 Ethernet cables needed for the remaining nodes.
 2. Connect the remaining Wyse systems to the managed Gigabit switch one at a time.
-3. Bring the remaining four Wyse systems onto the network.
-4. Install and configure Debian on each node.
+3. Bring the remaining three Wyse systems onto the network.
+4. Install and configure Debian on each remaining node.
 5. Assign hostnames and DHCP reservations.
 6. Configure and verify SSH access to every node.
 7. Install the K3s server on Keith.
 8. Join Pidge, Lance, Allura, and Hunk as K3s agents.
 9. Verify the cluster with `kubectl get nodes`.
 10. Deploy a small test workload across the cluster.
-11. Evaluate the 128 GB USB storage idea for Pidge and determine whether it is useful for shared or persistent storage.
+11. Evaluate the 128 GB USB storage idea for Hunk and determine whether it is useful for shared or persistent storage.
 12. Document workloads, failures, troubleshooting, and design changes as the cluster evolves.
 
 ## Skills Demonstrated
@@ -217,8 +229,11 @@ This project is intended to demonstrate practical experience with:
 - Configured hostname and SSH access
 - Verified remote connectivity
 - Designated Keith as the planned K3s control-plane node
-- Designated Pidge as the planned shared-storage node
 - Established a predictable DHCP reservation scheme based on physical unit number
+- Assigned physical unit #5 as **Pidge**
+- Configured Pidge to use the #5 DHCP reservation (`192.168.x.105` in public documentation)
+- Brought Pidge online as the second configured node
+- Updated the planned shared-storage host from Pidge to **Hunk**
 - Planned all five nodes to connect through a cloud-managed Gigabit switch
 - Paused additional node deployment until more Ethernet cables are completed
 
