@@ -141,11 +141,11 @@ The addressing pattern follows the physical unit number:
 
 | Physical Unit | Public Documentation Address | Assignment |
 |---:|---|---|
-| #1 | `192.168.x.101` | **Lance** |
-| #2 | `192.168.x.102` | **Hunk** |
-| #3 | `192.168.x.103` | **Allura** |
-| #4 | `192.168.x.104` | **Keith** |
-| #5 | `192.168.x.105` | **Pidge** |
+| #1 | `192.168.x.x` | **Lance** |
+| #2 | `192.168.x.x` | **Hunk** |
+| #3 | `192.168.x.x` | **Allura** |
+| #4 | `192.168.x.x` | **Keith** |
+| #5 | `192.168.x.x` | **Pidge** |
 
 The subnet is intentionally sanitized as `192.168.x.x` in the public documentation. MAC addresses and other identifying network information are kept private.
 
