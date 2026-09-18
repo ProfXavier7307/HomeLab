@@ -36,15 +36,17 @@ The systems are named after characters from *Voltron*. Rather than building the 
 
 The cluster is named **Voltron**, with each node named after a member of the team.
 
-The names are not purely cosmetic; where possible, the planned infrastructure roles reflect the characters:
+The final physical-unit naming map is:
 
-- **Keith** — planned K3s control-plane node, reflecting his leadership role
-- **Pidge** — worker node
-- **Lance** — planned worker node
-- **Allura** — planned worker node
-- **Hunk** — planned worker and storage host
+| Physical Unit | Node | Lion | Planned Role |
+|---:|---|---|---|
+| #1 | **Lance** | Red Lion | K3s worker |
+| #2 | **Hunk** | Yellow Lion | K3s worker / planned storage host |
+| #3 | **Allura** | Blue Lion | K3s worker |
+| #4 | **Keith** | Black Lion | K3s control plane |
+| #5 | **Pidge** | Green Lion | K3s worker |
 
-This naming scheme also makes the individual systems easier to identify than generic hostnames such as `node1` or `worker2`.
+This naming scheme makes the individual systems easier to identify than generic hostnames such as `node1` or `worker2`.
 
 ## Hardware
 
@@ -61,11 +63,11 @@ The USB storage idea is currently only a plan and has not been deployed.
 
 | Node | Voltron Role | Physical Unit | Planned Cluster Role | Current Status |
 |---|---|---:|---|---|
+| **Lance** | Red Lion | #1 | Worker | Offline / not configured yet |
+| **Hunk** | Yellow Lion | #2 | Worker / planned storage host | Offline / not configured yet |
+| **Allura** | Blue Lion | #3 | Worker | Offline / not configured yet |
 | **Keith** | Black Lion | #4 | K3s control plane | **Online / Debian configured / SSH working** |
 | **Pidge** | Green Lion | #5 | Worker | **Online / Debian configured / SSH working / DHCP reservation configured** |
-| **Lance** | Red Lion | TBD | Worker | Not configured yet |
-| **Allura** | Blue Lion | TBD | Worker | Not configured yet |
-| **Hunk** | Yellow Lion | TBD | Worker / planned storage host | Not configured yet |
 
 ## Current Progress
 
@@ -97,7 +99,7 @@ keith
 
 ### Pidge — Second Node Online
 
-Physical unit **#5** has now been assigned as **Pidge**.
+Physical unit **#5** has been assigned as **Pidge**.
 
 Completed so far:
 
@@ -107,21 +109,41 @@ Completed so far:
 - Verified the node is reachable on the local network
 - Designated Pidge as a future K3s worker node
 
-Remote administration is performed over SSH using each node's local network address. MAC addresses, SSH keys, and other sensitive network information are intentionally not published in this repository.
+At the current stage, **Keith and Pidge are the only two nodes powered/configured for normal network use**. Lance, Hunk, and Allura are assigned but have not yet been brought online as Debian/K3s nodes.
+
+## Windows SSH Launcher
+
+A small Python utility was added to simplify connecting to the cluster from Windows:
+
+[`tools/voltron_ssh.py`](tools/voltron_ssh.py)
+
+The launcher presents all five Voltron nodes in a menu and opens the selected SSH connection in a **new Command Prompt window**, allowing multiple node sessions to remain open simultaneously. It uses the Windows OpenSSH client with the `xander` account.
+
+Example behavior:
+
+```text
+1. Lance  (Red Lion)
+2. Hunk   (Yellow Lion)
+3. Allura (Blue Lion)
+4. Keith  (Black Lion)
+5. Pidge  (Green Lion)
+```
+
+The launcher has been tested successfully with the currently online nodes, **Keith and Pidge**.
 
 ## Networking and Addressing Plan
 
-All five cluster nodes will connect by wired Ethernet to a **cloud-managed Gigabit switch**. The switch provides the physical Layer 2 connection between the nodes and the rest of the home network, while the router continues to provide DHCP addressing and reservations.
+All five cluster nodes connect by wired Ethernet to a **cloud-managed Gigabit switch**. The switch provides the physical Layer 2 connection between the nodes and the rest of the home network, while the router provides DHCP addressing and reservations.
 
-Each physical Wyse unit will receive a predictable DHCP reservation so the nodes can be reached consistently without manually assigning static addresses inside Debian. The systems themselves remain configured for DHCP, while the router assigns the same address to each node based on its network adapter.
+Each physical Wyse unit receives a predictable DHCP reservation so the nodes can be reached consistently without manually assigning static addresses inside Debian. The systems themselves remain configured for DHCP, while the router assigns the same address to each node based on its network adapter.
 
 The addressing pattern follows the physical unit number:
 
 | Physical Unit | Public Documentation Address | Assignment |
 |---:|---|---|
-| #1 | `192.168.x.101` | DHCP reservation |
-| #2 | `192.168.x.102` | DHCP reservation |
-| #3 | `192.168.x.103` | DHCP reservation |
+| #1 | `192.168.x.101` | **Lance** |
+| #2 | `192.168.x.102` | **Hunk** |
+| #3 | `192.168.x.103` | **Allura** |
 | #4 | `192.168.x.104` | **Keith** |
 | #5 | `192.168.x.105` | **Pidge** |
 
@@ -143,15 +165,13 @@ K3s is not installed yet. Once the remaining base-node work is complete, the pla
            +-----------+-----------+-----------+-----------+
            |           |           |           |           |
        +--------+  +--------+  +--------+  +--------+  +--------+
-       | Allura |  | Lance  |  | Keith  |  | Pidge  |  | Hunk   |
-       | Agent  |  | Agent  |  |  K3s   |  | Agent  |  | Agent  |
-       |        |  |        |  | Server |  |        |  |Storage |
+       | Lance  |  | Hunk   |  | Allura |  | Keith  |  | Pidge  |
+       | Agent  |  | Agent  |  | Agent  |  |  K3s   |  | Agent  |
+       |        |  |Storage |  |        |  | Server |  |        |
        +--------+  +--------+  +--------+  +--------+  +--------+
 ```
 
-Keith will run the K3s server/control-plane role. Allura, Lance, Pidge, and Hunk are planned as agent/worker nodes, with Hunk also serving as the planned storage host.
-
-The diagram intentionally shows all five systems as peers connected to the same managed switch. Keith coordinates the Kubernetes cluster as the control-plane node, but the other systems are not physically connected through Keith.
+Keith will run the K3s server/control-plane role. Lance, Hunk, Allura, and Pidge are planned as agent/worker nodes, with Hunk also serving as the planned storage host.
 
 ## Why Wyse 3040 Thin Clients?
 
@@ -189,17 +209,15 @@ Configuration examples may use sanitized addresses or placeholders where appropr
 ## Next Steps
 
 1. Build/terminate the additional Cat6 Ethernet cables needed for the remaining nodes.
-2. Connect the remaining Wyse systems to the managed Gigabit switch one at a time.
-3. Bring the remaining three Wyse systems onto the network.
-4. Install and configure Debian on each remaining node.
-5. Assign hostnames and DHCP reservations.
-6. Configure and verify SSH access to every node.
-7. Install the K3s server on Keith.
-8. Join Pidge, Lance, Allura, and Hunk as K3s agents.
-9. Verify the cluster with `kubectl get nodes`.
-10. Deploy a small test workload across the cluster.
-11. Evaluate the 128 GB USB storage idea for Hunk and determine whether it is useful for shared or persistent storage.
-12. Document workloads, failures, troubleshooting, and design changes as the cluster evolves.
+2. Bring Lance (#1), Hunk (#2), and Allura (#3) onto the network.
+3. Install and configure Debian on each remaining node.
+4. Configure their DHCP reservations and verify SSH access.
+5. Install the K3s server on Keith.
+6. Join Pidge, Lance, Allura, and Hunk as K3s agents.
+7. Verify the cluster with `kubectl get nodes`.
+8. Deploy a small test workload across the cluster.
+9. Evaluate the 128 GB USB storage idea for Hunk and determine whether it is useful for shared or persistent storage.
+10. Document workloads, failures, troubleshooting, and design changes as the cluster evolves.
 
 ## Skills Demonstrated
 
@@ -211,6 +229,7 @@ This project is intended to demonstrate practical experience with:
 - Managed Ethernet switching
 - Ethernet cable termination and physical networking
 - Hostname and node management
+- Windows/Python administration tooling
 - Hardware troubleshooting
 - Kubernetes/K3s concepts
 - Container orchestration
@@ -224,6 +243,7 @@ This project is intended to demonstrate practical experience with:
 ### September 2026 — Initial Build
 
 - Acquired and tested five Dell Wyse 3040 systems
+- Finalized node mapping: **#1 Lance, #2 Hunk, #3 Allura, #4 Keith, #5 Pidge**
 - Selected physical unit #4 as **Keith**
 - Installed Debian on Keith
 - Configured hostname and SSH access
@@ -233,9 +253,9 @@ This project is intended to demonstrate practical experience with:
 - Assigned physical unit #5 as **Pidge**
 - Configured Pidge to use the #5 DHCP reservation (`192.168.x.105` in public documentation)
 - Brought Pidge online as the second configured node
-- Updated the planned shared-storage host from Pidge to **Hunk**
+- Designated **Hunk (#2)** as the planned shared-storage host
+- Added and tested a Windows Python SSH launcher that can open simultaneous SSH sessions to the Voltron nodes
 - Planned all five nodes to connect through a cloud-managed Gigabit switch
-- Paused additional node deployment until more Ethernet cables are completed
 
 ---
 
