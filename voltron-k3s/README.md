@@ -54,7 +54,10 @@ This naming scheme makes the individual systems easier to identify than generic 
 - Internal eMMC storage on each node
 - **Cloud-managed Gigabit Ethernet switch** for cluster connectivity
 - Gigabit Ethernet networking
+- Custom-built wooden cluster rack/stand for the five thin clients and switch
+- Power distribution mounted and connected in the rack
 - Custom-made Cat6 Ethernet cables as additional nodes are brought online
+- Pidge's Ethernet cable completed and connected
 - **Potential future storage:** 128 GB USB storage attached to Pidge for shared-storage experimentation
 
 The USB storage idea is currently only a plan and has not been deployed.
@@ -109,7 +112,24 @@ Completed so far:
 - Verified the node is reachable on the local network
 - Designated Pidge as a future K3s worker node
 
-At the current stage, **Keith and Pidge are the only two nodes powered/configured for normal network use**. Lance, Hunk, and Allura are assigned but have not yet been brought online as Debian/K3s nodes.
+At the current stage, **Keith and Pidge are the only two nodes configured for normal network use**. The physical rack is now built, the switch and power distribution are installed in the stand, and Pidge has a completed Ethernet run. Lance, Hunk, and Allura are physically staged but still need to be brought online and have their Ethernet patch cables completed.
+
+## Physical Rack and Cabling
+
+A custom wooden rack/stand was built in the home wood shop to hold the five Dell Wyse 3040 nodes and the managed Gigabit switch. The rack was assembled with wood glue and brad nails, then left clamped overnight for the glue to cure before equipment was installed.
+
+Current physical progress:
+
+- Rack construction complete
+- Five Wyse systems positioned in the stand
+- Managed Gigabit switch installed in the stand
+- Power distribution connected and organized
+- Pidge's Ethernet cable completed and connected
+- Keith and Pidge remain the currently configured network nodes
+- Ethernet cables for Lance, Hunk, and Allura still need to be made
+- Lance, Hunk, and Allura still need their Debian/network setup completed
+
+This phase of the project adds practical physical-infrastructure work alongside the Linux and Kubernetes work, including rack layout, cable fabrication, power planning, and equipment organization.
 
 ## Windows SSH Launcher
 
@@ -208,10 +228,10 @@ Configuration examples may use sanitized addresses or placeholders where appropr
 
 ## Next Steps
 
-1. Build/terminate the additional Cat6 Ethernet cables needed for the remaining nodes.
-2. Bring Lance (#1), Hunk (#2), and Allura (#3) onto the network.
-3. Install and configure Debian on each remaining node.
-4. Configure their DHCP reservations and verify SSH access.
+1. Bring Lance (#1), Hunk (#2), and Allura (#3) online with the unattended Debian installer.
+2. Build/terminate the remaining Cat6 Ethernet cables for Lance, Hunk, and Allura.
+3. Connect all five nodes to the managed Gigabit switch.
+4. Configure DHCP reservations and verify SSH access to every node.
 5. Install the K3s server on Keith.
 6. Join Pidge, Lance, Allura, and Hunk as K3s agents.
 7. Verify the cluster with `kubectl get nodes`.
@@ -228,6 +248,8 @@ This project is intended to demonstrate practical experience with:
 - DHCP and local network configuration
 - Managed Ethernet switching
 - Ethernet cable termination and physical networking
+- Small-scale rack/stand construction and equipment layout
+- Power distribution and cable-management planning
 - Hostname and node management
 - Windows/Python administration tooling
 - Hardware troubleshooting
@@ -256,6 +278,16 @@ This project is intended to demonstrate practical experience with:
 - Designated **Pidge (#5)** as the planned shared-storage host
 - Added and tested a Windows Python SSH launcher that can open simultaneous SSH sessions to the Voltron nodes
 - Planned all five nodes to connect through a cloud-managed Gigabit switch
+
+### October 2026 — Rack Assembly and Physical Integration
+
+- Built a custom wooden rack/stand for the Voltron cluster in the wood shop
+- Used wood glue and brad nails for assembly and allowed the rack to cure overnight while clamped
+- Installed the five Wyse thin clients and managed Gigabit switch into the completed stand
+- Connected and organized cluster power distribution
+- Fabricated and connected Pidge's Cat6 Ethernet cable
+- Confirmed Keith and Pidge remain the two configured network nodes
+- Remaining work before K3s deployment: bring Lance, Hunk, and Allura online and fabricate their Ethernet patch cables
 
 ---
 
